@@ -90,7 +90,7 @@ class Patch:
 
   def _getOutputDimensions(self):
     tpParams = self.params["tpParams"]
-    return [tpParams["columnCount"], tpParams["cellsPerColumn"]]
+    return [tpParams["columnCount"], 1, tpParams["cellsPerColumn"]]
 
 
 
