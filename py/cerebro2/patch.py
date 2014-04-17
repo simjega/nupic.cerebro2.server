@@ -21,12 +21,7 @@
 import json
 import os
 
-
-
-DIRNAME_DIMENSIONS      = "dimensions"
-DIRNAME_MODEL_STATES    = "states"
-FILENAME_ACTIVE_COLUMNS = "active_columns.json"
-FILENAME_ACTIVE_CELLS   = "active_cells.json"
+from cerebro2.paths import Paths
 
 
 
@@ -34,11 +29,8 @@ class Patch:
 
 
   def __init__(self, model, params, dataDir="/tmp/cerebro2/model"):
-    self.dataDir = dataDir
+    self.paths = Paths(dataDir)
     self.params = params
-
-    if not os.path.exists(dataDir):
-      os.makedirs(dataDir)
 
     self._saveDimensions()
 
@@ -68,36 +60,17 @@ class Patch:
     ]
 
     for dimension in dimensions:
-      dimensionDir = os.path.join(self.dataDir, DIRNAME_DIMENSIONS)
-      if not os.path.exists(dimensionDir):
-        os.makedirs(dimensionDir)
-
-      filepath = os.path.join(dimensionDir, dimension[0]+".json")
-      writeJSON(dimension[1], filepath)
+      writeJSON(dimension[1], self.paths.dimensions(dimension[0]))
 
 
   def _saveInputState(self):
     sdr = self.inRegion.getOutputData('dataOut').nonzero()[0].tolist()
-    filepath = os.path.join(self._getStateDir("input"), FILENAME_ACTIVE_CELLS)
-    writeJSON(sdr, filepath)
+    writeJSON(sdr, self.paths.activeCells("input", self.iteration))
 
 
   def _saveSPState(self):
     activeCells = self.spRegion.getOutputData('bottomUpOut').nonzero()[0].tolist()
-    filepath = os.path.join(self._getStateDir("output"), FILENAME_ACTIVE_CELLS)
-    writeJSON(activeCells, filepath)
-
-
-  def _getStateDir(self, layerType):
-    currentDir = os.path.join(self.dataDir,
-                              DIRNAME_MODEL_STATES,
-                              str(self.iteration),
-                              layerType)
-
-    if not os.path.exists(currentDir):
-      os.makedirs(currentDir)
-
-    return currentDir
+    writeJSON(activeCells, self.paths.activeCells("output", self.iteration))
 
 
   def _getInputDimensions(self):

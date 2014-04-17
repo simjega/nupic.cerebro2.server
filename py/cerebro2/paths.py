@@ -18,47 +18,43 @@
 #
 # http://numenta.org/licenses/
 # ----------------------------------------------------------------------
-
-import json
 import os
-import web
-
-from cerebro2.fetch import Fetch
 
 
 
-# TODO: make this a parameter
-DATA_DIR = "/tmp/cerebro2/model"
-
-fetch = Fetch(DATA_DIR)
-
-urls = (
-  r"/([-\w]*)/dimensions", "Dimensions",
-  r"/([-\w]*)/(\d+)/active_cells", "ActiveCells"
-)
+DIRNAME_DIMENSIONS      = "dimensions"
+DIRNAME_MODEL_STATES    = "states"
+FILENAME_ACTIVE_COLUMNS = "active_columns.json"
+FILENAME_ACTIVE_CELLS   = "active_cells.json"
 
 
 
-class Dimensions:
+class Paths:
 
 
-  def GET(self, layer):
-    return jsonResponse(fetch.getDimensions(layer))
+  def __init__(self, dataDir):
+    self.dataDir = dataDir
+
+    if not os.path.exists(dataDir):
+      os.makedirs(dataDir)
 
 
+  def dimensions(self, layer):
+    directory = os.path.join(self.dataDir, DIRNAME_DIMENSIONS)
 
-class ActiveCells:
+    if not os.path.exists(directory):
+      os.makedirs(directory)
 
-
-  def GET(self, layer, iteration):
-    return jsonResponse(fetch.getActiveCells(layer, iteration))
-
-
-
-def jsonResponse(obj):
-  web.header('Content-Type', 'application/json')
-  return json.dumps(obj)
+    return os.path.join(directory, layer+".json")
 
 
+  def activeCells(self, layer, iteration):
+    directory = os.path.join(self.dataDir,
+                              DIRNAME_MODEL_STATES,
+                              str(iteration),
+                              layer)
 
-app = web.application(urls, globals())
+    if not os.path.exists(directory):
+      os.makedirs(directory)
+
+    return os.path.join(directory, FILENAME_ACTIVE_CELLS)

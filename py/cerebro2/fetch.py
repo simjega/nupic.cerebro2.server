@@ -18,47 +18,28 @@
 #
 # http://numenta.org/licenses/
 # ----------------------------------------------------------------------
-
 import json
-import os
-import web
 
-from cerebro2.fetch import Fetch
+from cerebro2.paths import Paths
 
 
 
-# TODO: make this a parameter
-DATA_DIR = "/tmp/cerebro2/model"
-
-fetch = Fetch(DATA_DIR)
-
-urls = (
-  r"/([-\w]*)/dimensions", "Dimensions",
-  r"/([-\w]*)/(\d+)/active_cells", "ActiveCells"
-)
+class Fetch:
 
 
+  def __init__(self, dataDir):
+    self.paths = Paths(dataDir)
 
-class Dimensions:
+
+  def getDimensions(self, layer):
+    return readJSON(self.paths.dimensions(layer))
 
 
-  def GET(self, layer):
-    return jsonResponse(fetch.getDimensions(layer))
+  def getActiveCells(self, layer, iteration):
+    return readJSON(self.paths.activeCells(layer, iteration))
 
 
 
-class ActiveCells:
-
-
-  def GET(self, layer, iteration):
-    return jsonResponse(fetch.getActiveCells(layer, iteration))
-
-
-
-def jsonResponse(obj):
-  web.header('Content-Type', 'application/json')
-  return json.dumps(obj)
-
-
-
-app = web.application(urls, globals())
+def readJSON(filepath):
+  with open(filepath, 'r') as infile:
+    return json.load(infile)
