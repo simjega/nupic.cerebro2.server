@@ -42,10 +42,7 @@ class Paths:
   def dimensions(self, layer):
     directory = os.path.join(self.dataDir, DIRNAME_DIMENSIONS)
 
-    if not os.path.exists(directory):
-      os.makedirs(directory)
-
-    return os.path.join(directory, layer+".json")
+    return getPath(directory, layer+".json")
 
 
   def activeCells(self, layer, iteration):
@@ -54,7 +51,21 @@ class Paths:
                               str(iteration),
                               layer)
 
-    if not os.path.exists(directory):
-      os.makedirs(directory)
+    return getPath(directory, FILENAME_ACTIVE_CELLS)
 
-    return os.path.join(directory, FILENAME_ACTIVE_CELLS)
+
+  def activeColumns(self, layer, iteration):
+    directory = os.path.join(self.dataDir,
+                              DIRNAME_MODEL_STATES,
+                              str(iteration),
+                              layer)
+
+    return getPath(directory, FILENAME_ACTIVE_COLUMNS)
+
+
+
+def getPath(directory, filename):
+  if not os.path.exists(directory):
+    os.makedirs(directory)
+
+  return os.path.join(directory, filename)

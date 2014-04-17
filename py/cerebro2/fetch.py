@@ -39,6 +39,10 @@ class Fetch:
     return readJSON(self.paths.activeCells(layer, iteration))
 
 
+  def getActiveColumns(self, layer, iteration):
+    return readJSON(self.paths.activeColumns(layer, iteration))
+
+
 
 def readJSON(filepath):
   with open(filepath, 'r') as infile:

@@ -35,6 +35,7 @@ fetch = Fetch(DATA_DIR)
 urls = (
   r"/([-\w]*)/dimensions", "Dimensions",
   r"/([-\w]*)/(\d+)/active_cells", "ActiveCells"
+  r"/([-\w]*)/(\d+)/active_columns", "ActiveColumns"
 )
 
 
@@ -55,9 +56,19 @@ class ActiveCells:
 
 
 
+class ActiveColumns:
+
+
+  def GET(self, layer, iteration):
+    return jsonResponse(fetch.getActiveColumns(layer, iteration))
+
+
+
 def jsonResponse(obj):
+  callbackFn = web.input(callback=None).callback
+  jsonStr = json.dumps(obj)
   web.header('Content-Type', 'application/json')
-  return json.dumps(obj)
+  return "%s(%s)" % (callbackFn, jsonStr) if callbackFn else jsonStr
 
 
 

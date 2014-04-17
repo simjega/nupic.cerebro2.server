@@ -69,8 +69,9 @@ class Patch:
 
 
   def _saveSPState(self):
-    activeCells = self.spRegion.getOutputData('bottomUpOut').nonzero()[0].tolist()
-    writeJSON(activeCells, self.paths.activeCells("output", self.iteration))
+    outputData = self.spRegion.getOutputData('bottomUpOut')
+    activeColumns = outputData.nonzero()[0].tolist()
+    writeJSON(activeColumns, self.paths.activeColumns("output", self.iteration))
 
 
   def _getInputDimensions(self):
