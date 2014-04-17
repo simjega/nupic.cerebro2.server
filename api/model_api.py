@@ -34,8 +34,8 @@ fetch = Fetch(DATA_DIR)
 
 urls = (
   r"/([-\w]*)/dimensions", "Dimensions",
-  r"/([-\w]*)/(\d+)/active_cells", "ActiveCells"
-  r"/([-\w]*)/(\d+)/active_columns", "ActiveColumns"
+  r"/([-\w]*)/(\d+)/active_cells", "ActiveCells",
+  r"/([-\w]*)/(\d+)/active_columns", "ActiveColumns",
 )
 
 
