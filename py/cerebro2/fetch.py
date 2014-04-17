@@ -36,14 +36,21 @@ class Fetch:
 
 
   def getActiveCells(self, layer, iteration):
-    return readJSON(self.paths.activeCells(layer, iteration))
+    return readJSON(self.paths.activeCells(layer, iteration),
+                    notFoundValue=[])
 
 
   def getActiveColumns(self, layer, iteration):
-    return readJSON(self.paths.activeColumns(layer, iteration))
+    return readJSON(self.paths.activeColumns(layer, iteration),
+                    notFoundValue=[])
 
 
 
-def readJSON(filepath):
-  with open(filepath, 'r') as infile:
-    return json.load(infile)
+def readJSON(filepath, notFoundValue=None):
+  try:
+    with open(filepath, 'r') as infile:
+      return json.load(infile)
+  except IOError as error:
+    if notFoundValue == None:
+      raise error
+    return notFoundValue
