@@ -33,10 +33,19 @@ DATA_DIR = "/tmp/cerebro2/model"
 fetch = Fetch(DATA_DIR)
 
 urls = (
+  r"/num_iterations", "NumIterations",
   r"/([-\w]*)/dimensions", "Dimensions",
   r"/([-\w]*)/(\d+)/active_cells", "ActiveCells",
   r"/([-\w]*)/(\d+)/active_columns", "ActiveColumns",
 )
+
+
+
+class NumIterations:
+
+
+  def GET(self):
+    return jsonResponse(fetch.getNumIterations())
 
 
 

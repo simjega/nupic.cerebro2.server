@@ -39,6 +39,11 @@ class Paths:
       os.makedirs(dataDir)
 
 
+  def states(self):
+    directory = os.path.join(self.dataDir, DIRNAME_MODEL_STATES)
+    return getDirectory(directory)
+
+
   def dimensions(self, layer):
     directory = os.path.join(self.dataDir, DIRNAME_DIMENSIONS)
 
@@ -64,8 +69,12 @@ class Paths:
 
 
 
-def getPath(directory, filename):
+def getDirectory(directory):
   if not os.path.exists(directory):
     os.makedirs(directory)
 
-  return os.path.join(directory, filename)
+  return directory
+
+
+def getPath(directory, filename):
+  return os.path.join(getDirectory(directory), filename)

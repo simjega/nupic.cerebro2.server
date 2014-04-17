@@ -19,6 +19,7 @@
 # http://numenta.org/licenses/
 # ----------------------------------------------------------------------
 import json
+import os
 
 from cerebro2.paths import Paths
 
@@ -29,6 +30,11 @@ class Fetch:
 
   def __init__(self, dataDir):
     self.paths = Paths(dataDir)
+
+
+  def getNumIterations(self):
+    statesDir = self.paths.states()
+    return len(os.listdir(statesDir))
 
 
   def getDimensions(self, layer):
