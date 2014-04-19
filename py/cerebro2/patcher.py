@@ -67,6 +67,10 @@ class Patcher:
     writeJSON(activeCells, self.paths.activeCells(layer, iteration))
 
 
+  def savePredictedCells(self, predictedCells, layer, iteration):
+    writeJSON(predictedCells, self.paths.predictedCells(layer, iteration))
+
+
 
 class Patch:
 
@@ -162,6 +166,9 @@ class TPPatch(Patch):
   def saveState(self):
     activeCells = self.tp.getActiveState().nonzero()[0].tolist()
     self.patcher.saveActiveCells(activeCells, self.layer, self.iteration)
+
+    predictedCells = self.tp.getPredictedState().nonzero()[0].tolist()
+    self.patcher.savePredictedCells(predictedCells, self.layer, self.iteration)
 
 
 

@@ -41,13 +41,18 @@ class Fetcher:
     return readJSON(self.paths.dimensions(layer))
 
 
+  def getActiveColumns(self, layer, iteration):
+    return readJSON(self.paths.activeColumns(layer, iteration),
+                    notFoundValue=[])
+
+
   def getActiveCells(self, layer, iteration):
     return readJSON(self.paths.activeCells(layer, iteration),
                     notFoundValue=[])
 
 
-  def getActiveColumns(self, layer, iteration):
-    return readJSON(self.paths.activeColumns(layer, iteration),
+  def getPredictedCells(self, layer, iteration):
+    return readJSON(self.paths.predictedCells(layer, iteration),
                     notFoundValue=[])
 
 

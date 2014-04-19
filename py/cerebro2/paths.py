@@ -22,10 +22,11 @@ import os
 
 
 
-DIRNAME_DIMENSIONS      = "dimensions"
-DIRNAME_MODEL_STATES    = "states"
-FILENAME_ACTIVE_COLUMNS = "active_columns.json"
-FILENAME_ACTIVE_CELLS   = "active_cells.json"
+DIRNAME_DIMENSIONS       = "dimensions"
+DIRNAME_MODEL_STATES     = "states"
+FILENAME_ACTIVE_COLUMNS  = "active_columns.json"
+FILENAME_ACTIVE_CELLS    = "active_cells.json"
+FILENAME_PREDICTED_CELLS = "predicted_cells.json"
 
 
 
@@ -50,6 +51,15 @@ class Paths:
     return getPath(directory, layer+".json")
 
 
+  def activeColumns(self, layer, iteration):
+    directory = os.path.join(self.dataDir,
+                              DIRNAME_MODEL_STATES,
+                              str(iteration),
+                              layer)
+
+    return getPath(directory, FILENAME_ACTIVE_COLUMNS)
+
+
   def activeCells(self, layer, iteration):
     directory = os.path.join(self.dataDir,
                               DIRNAME_MODEL_STATES,
@@ -59,13 +69,13 @@ class Paths:
     return getPath(directory, FILENAME_ACTIVE_CELLS)
 
 
-  def activeColumns(self, layer, iteration):
+  def predictedCells(self, layer, iteration):
     directory = os.path.join(self.dataDir,
                               DIRNAME_MODEL_STATES,
                               str(iteration),
                               layer)
 
-    return getPath(directory, FILENAME_ACTIVE_COLUMNS)
+    return getPath(directory, FILENAME_PREDICTED_CELLS)
 
 
 

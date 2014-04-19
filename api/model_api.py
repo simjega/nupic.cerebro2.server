@@ -35,8 +35,9 @@ fetcher = Fetcher(DATA_DIR)
 urls = (
   r"/num_iterations", "NumIterations",
   r"/([-\w]*)/dimensions", "Dimensions",
-  r"/([-\w]*)/(\d+)/active_cells", "ActiveCells",
   r"/([-\w]*)/(\d+)/active_columns", "ActiveColumns",
+  r"/([-\w]*)/(\d+)/active_cells", "ActiveCells",
+  r"/([-\w]*)/(\d+)/predicted_cells", "PredictedCells",
 )
 
 
@@ -57,6 +58,14 @@ class Dimensions:
 
 
 
+class ActiveColumns:
+
+
+  def GET(self, layer, iteration):
+    return jsonResponse(fetcher.getActiveColumns(layer, iteration))
+
+
+
 class ActiveCells:
 
 
@@ -65,11 +74,11 @@ class ActiveCells:
 
 
 
-class ActiveColumns:
+class PredictedCells:
 
 
   def GET(self, layer, iteration):
-    return jsonResponse(fetcher.getActiveColumns(layer, iteration))
+    return jsonResponse(fetcher.getPredictedCells(layer, iteration))
 
 
 
