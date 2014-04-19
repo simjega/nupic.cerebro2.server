@@ -22,11 +22,12 @@ import os
 
 
 
-DIRNAME_DIMENSIONS       = "dimensions"
-DIRNAME_MODEL_STATES     = "states"
-FILENAME_ACTIVE_COLUMNS  = "active_columns.json"
-FILENAME_ACTIVE_CELLS    = "active_cells.json"
-FILENAME_PREDICTED_CELLS = "predicted_cells.json"
+DIRNAME_DIMENSIONS         = "dimensions"
+DIRNAME_MODEL_STATES       = "states"
+FILENAME_ACTIVE_COLUMNS    = "active_columns.json"
+FILENAME_ACTIVE_CELLS      = "active_cells.json"
+FILENAME_PREDICTED_CELLS   = "predicted_cells.json"
+FILENAME_PROXIMAL_SYNAPSES = "proximal_synapses.json"
 
 
 
@@ -76,6 +77,15 @@ class Paths:
                               layer)
 
     return getPath(directory, FILENAME_PREDICTED_CELLS)
+
+
+  def proximalSynapses(self, layer, iteration):
+    directory = os.path.join(self.dataDir,
+                              DIRNAME_MODEL_STATES,
+                              str(iteration),
+                              layer)
+
+    return getPath(directory, FILENAME_PROXIMAL_SYNAPSES)
 
 
 

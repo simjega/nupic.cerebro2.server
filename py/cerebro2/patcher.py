@@ -19,9 +19,16 @@
 # http://numenta.org/licenses/
 # ----------------------------------------------------------------------
 import json
+import numpy
 import os
 
+from nupic.bindings.math import GetNTAReal
+
 from cerebro2.paths import Paths
+
+
+
+realType = GetNTAReal()
 
 
 
@@ -69,6 +76,10 @@ class Patcher:
 
   def savePredictedCells(self, predictedCells, layer, iteration):
     writeJSON(predictedCells, self.paths.predictedCells(layer, iteration))
+
+
+  def saveProximalSynapses(self, proximalSynapses, layer, iteration):
+    writeJSON(proximalSynapses, self.paths.proximalSynapses(layer, iteration))
 
 
 
@@ -138,6 +149,18 @@ class SPPatch(Patch):
     activeColumns = activeArray.nonzero()[0].tolist()
     self.patcher.saveActiveColumns(activeColumns, self.layer, self.iteration)
 
+    numColumns = self.sp.getNumColumns()
+    numInputs = self.sp.getNumInputs()
+    permanence = numpy.zeros(numInputs).astype(realType)
+    proximalSynapses = []
+
+    for column in range(numColumns):
+      self.sp.getPermanence(column, permanence)
+
+      for input in permanence.nonzero()[0]:  # TODO: can this be optimized?
+        proximalSynapses.append([column, input, permanence[input].tolist()])
+
+    self.patcher.saveProximalSynapses(proximalSynapses, self.layer, self.iteration)
 
 
 class TPPatch(Patch):

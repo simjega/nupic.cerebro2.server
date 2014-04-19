@@ -38,6 +38,7 @@ urls = (
   r"/([-\w]*)/(\d+)/active_columns", "ActiveColumns",
   r"/([-\w]*)/(\d+)/active_cells", "ActiveCells",
   r"/([-\w]*)/(\d+)/predicted_cells", "PredictedCells",
+  r"/([-\w]*)/(\d+)/proximal_synapses", "ProximalSynapses",
 )
 
 
@@ -79,6 +80,14 @@ class PredictedCells:
 
   def GET(self, layer, iteration):
     return jsonResponse(fetcher.getPredictedCells(layer, iteration))
+
+
+
+class ProximalSynapses:
+
+
+  def GET(self, layer, iteration):
+    return jsonResponse(fetcher.getProximalSynapses(layer, iteration))
 
 
 
