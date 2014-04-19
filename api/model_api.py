@@ -23,14 +23,14 @@ import json
 import os
 import web
 
-from cerebro2.fetch import Fetch
+from cerebro2.fetcher import Fetcher
 
 
 
 # TODO: make this a parameter
 DATA_DIR = "/tmp/cerebro2/model"
 
-fetch = Fetch(DATA_DIR)
+fetcher = Fetcher(DATA_DIR)
 
 urls = (
   r"/num_iterations", "NumIterations",
@@ -45,7 +45,7 @@ class NumIterations:
 
 
   def GET(self):
-    return jsonResponse(fetch.getNumIterations())
+    return jsonResponse(fetcher.getNumIterations())
 
 
 
@@ -53,7 +53,7 @@ class Dimensions:
 
 
   def GET(self, layer):
-    return jsonResponse(fetch.getDimensions(layer))
+    return jsonResponse(fetcher.getDimensions(layer))
 
 
 
@@ -61,7 +61,7 @@ class ActiveCells:
 
 
   def GET(self, layer, iteration):
-    return jsonResponse(fetch.getActiveCells(layer, iteration))
+    return jsonResponse(fetcher.getActiveCells(layer, iteration))
 
 
 
@@ -69,7 +69,7 @@ class ActiveColumns:
 
 
   def GET(self, layer, iteration):
-    return jsonResponse(fetch.getActiveColumns(layer, iteration))
+    return jsonResponse(fetcher.getActiveColumns(layer, iteration))
 
 
 

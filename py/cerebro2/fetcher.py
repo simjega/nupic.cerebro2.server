@@ -25,7 +25,7 @@ from cerebro2.paths import Paths
 
 
 
-class Fetch:
+class Fetcher:
 
 
   def __init__(self, dataDir):
