@@ -154,6 +154,12 @@ class SPPatch(Patch):
     permanence = numpy.zeros(numInputs).astype(realType)
     proximalSynapses = []
 
+    """ Proximal synapses storage format:
+        A list of proximal connections, each represented by a list: [toIndex, fromIndex, permanence]
+            ...where fromIndex is the index of a cell in the input layer,
+                     toIndex is the index of a column in the SP layer,
+                     permanence is the permanence value of the proximal connection.
+    """
     for column in range(numColumns):
       self.sp.getPermanence(column, permanence)
 
