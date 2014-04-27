@@ -40,26 +40,19 @@ class Patcher:
 
 
   def patchCLAModel(self, model):
-    encoder = model._getSensorRegion().getSelf().encoder
-    self.patchEncoder(encoder, "input")
-
     sp = model._getSPRegion().getSelf()._sfdr
-    self.patchSP(sp, "output")
+    self.patchSP(sp)
 
     tp = model._getTPRegion().getSelf()._tfdr
-    self.patchTP(tp, "output")
+    self.patchTP(tp, sp=sp)
 
 
-  def patchEncoder(self, encoder, layer):
-    EncoderPatch(self, layer).patch(encoder)
+  def patchSP(self, sp):
+    SPPatch(self).patch(sp)
 
 
-  def patchSP(self, sp, layer):
-    SPPatch(self, layer).patch(sp)
-
-
-  def patchTP(self, tp, layer):
-    TPPatch(self, layer).patch(tp)
+  def patchTP(self, tp, sp=None):
+    TPPatch(self).patch(tp, sp=sp)
 
 
   def saveDimensions(self, dimensions, layer):
@@ -86,39 +79,9 @@ class Patcher:
 class Patch:
 
 
-  def __init__(self, patcher, layer):
+  def __init__(self, patcher):
     self.patcher = patcher
-    self.layer = layer
     self.iteration = 0
-
-
-
-class EncoderPatch(Patch):
-
-
-  def patch(self, encoder):
-    self.encoder = encoder
-    self.saveDimensions()
-
-    encodeIntoArray = encoder.encodeIntoArray
-
-    def patchedEncodeIntoArray(inputData, output):
-      results = encodeIntoArray(inputData, output)
-      self.saveState(output)
-      self.iteration += 1
-      return results
-
-    encoder.encodeIntoArray = patchedEncodeIntoArray
-
-
-  def saveDimensions(self):
-    dimensions = [self.encoder.getWidth(), 1, 1]
-    self.patcher.saveDimensions(dimensions, self.layer)
-
-
-  def saveState(self, output):
-    activeCells = output.nonzero()[0].tolist()
-    self.patcher.saveActiveCells(activeCells, self.layer, self.iteration)
 
 
 
@@ -127,27 +90,36 @@ class SPPatch(Patch):
 
   def patch(self, sp):
     self.sp = sp
-    self.saveDimensions()
+    self.saveInputDimensions()
+    self.saveColumnDimensions()
 
     compute = sp.compute
 
     def patchedCompute(inputVector, learn, activeArray):
       results = compute(inputVector, learn, activeArray)
-      self.saveState(activeArray)
+      self.saveState(inputVector, activeArray)
       self.iteration += 1
       return results
 
     sp.compute = patchedCompute
 
 
-  def saveDimensions(self):
-    dimensions = [self.sp.getNumColumns(), 1, 1]
-    self.patcher.saveDimensions(dimensions, self.layer)
+  def saveInputDimensions(self):
+    dimensions = self.sp._inputDimensions.tolist()  # TODO: Use getInputDimensions() when it is available
+    self.patcher.saveDimensions(dimensions, "input")
 
 
-  def saveState(self, activeArray):
+  def saveColumnDimensions(self):
+    dimensions = self.sp._columnDimensions.tolist()  # TODO: Use getColumnDimensions() when it is available
+    self.patcher.saveDimensions(dimensions, "output")
+
+
+  def saveState(self, inputVector, activeArray):
+    activeCells = inputVector.nonzero()[0].tolist()
+    self.patcher.saveActiveCells(activeCells, "input", self.iteration)
+
     activeColumns = activeArray.nonzero()[0].tolist()
-    self.patcher.saveActiveColumns(activeColumns, self.layer, self.iteration)
+    self.patcher.saveActiveColumns(activeColumns, "output", self.iteration)
 
     numColumns = self.sp.getNumColumns()
     numInputs = self.sp.getNumInputs()
@@ -166,14 +138,15 @@ class SPPatch(Patch):
       for input in permanence.nonzero()[0]:  # TODO: can this be optimized?
         proximalSynapses.append([column, input, permanence[input].tolist()])
 
-    self.patcher.saveProximalSynapses(proximalSynapses, self.layer, self.iteration)
+    self.patcher.saveProximalSynapses(proximalSynapses, "output", self.iteration)
 
 
 class TPPatch(Patch):
 
 
-  def patch(self, tp):
+  def patch(self, tp, sp=None):
     self.tp = tp
+    self.sp = sp
     self.saveDimensions()
 
     compute = tp.compute
@@ -188,16 +161,23 @@ class TPPatch(Patch):
 
 
   def saveDimensions(self):
-    dimensions = [self.tp.numberOfCols, 1, self.tp.cellsPerColumn]
-    self.patcher.saveDimensions(dimensions, self.layer)
+    if self.sp:
+      columnDimensions = self.sp._columnDimensions.tolist()  # TODO: Use getColumnDimensions() when it is available
+      if len(columnDimensions) < 2:
+        columnDimensions.append(1)
+      dimensions =  columnDimensions + [self.tp.cellsPerColumn]
+    else:
+      dimensions = [self.tp.numberOfCols, 1, self.tp.cellsPerColumn]
+
+    self.patcher.saveDimensions(dimensions, "output")
 
 
   def saveState(self):
     activeCells = self.tp.getActiveState().nonzero()[0].tolist()
-    self.patcher.saveActiveCells(activeCells, self.layer, self.iteration)
+    self.patcher.saveActiveCells(activeCells, "output", self.iteration)
 
     predictedCells = self.tp.getPredictedState().nonzero()[0].tolist()
-    self.patcher.savePredictedCells(predictedCells, self.layer, self.iteration)
+    self.patcher.savePredictedCells(predictedCells, "output", self.iteration)
 
 
 
