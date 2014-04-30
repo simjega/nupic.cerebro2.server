@@ -105,12 +105,12 @@ class SPPatch(Patch):
 
 
   def saveInputDimensions(self):
-    dimensions = self.sp._inputDimensions.tolist()  # TODO: Use getInputDimensions() when it is available
+    dimensions = list(self.sp.getInputDimensions())
     self.patcher.saveDimensions(dimensions, "input")
 
 
   def saveColumnDimensions(self):
-    dimensions = self.sp._columnDimensions.tolist()  # TODO: Use getColumnDimensions() when it is available
+    dimensions = list(self.sp.getColumnDimensions())
     self.patcher.saveDimensions(dimensions, "output")
 
 
@@ -162,7 +162,7 @@ class TPPatch(Patch):
 
   def saveDimensions(self):
     if self.sp:
-      columnDimensions = self.sp._columnDimensions.tolist()  # TODO: Use getColumnDimensions() when it is available
+      columnDimensions = list(self.sp.getColumnDimensions())
       if len(columnDimensions) < 2:
         columnDimensions.append(1)
       dimensions =  columnDimensions + [self.tp.cellsPerColumn]
