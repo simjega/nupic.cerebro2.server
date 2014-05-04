@@ -30,8 +30,8 @@ from nupic.research.spatial_pooler import SpatialPooler
 
 def run():
   sp = SpatialPooler(
-    inputDimensions=[5, 10],
-    columnDimensions=[10, 15],
+    inputDimensions=[10, 15],
+    columnDimensions=[5, 10],
     potentialRadius=2,
     potentialPct=0.5,
     synPermInactiveDec=0.1,
