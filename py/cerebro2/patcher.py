@@ -176,7 +176,7 @@ class TPPatch(Patch):
     activeCells = self.tp.getActiveState().nonzero()[0].tolist()
     self.patcher.saveActiveCells(activeCells, "output", self.iteration)
 
-    predictedCells = self.tp.getPredictedState().nonzero()[0].tolist()
+    predictedCells = self.tp.getPredictedState().reshape(-1).nonzero()[0].tolist()
     self.patcher.savePredictedCells(predictedCells, "output", self.iteration)
 
 
