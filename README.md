@@ -38,6 +38,10 @@ Then, after the model / SP / TP has through a number of iterations:
 
 Finally, switch to [nupic.cerebro2](https://github.com/chetan51/nupic.cerebro2) to visualize your model / SP / TP.
 
+## Demos
+
+See `/demo`.
+
 ## Notes
 
 - By default, the model state history is saved to `/tmp/cerebro2`.
