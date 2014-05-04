@@ -21,7 +21,7 @@
 # ----------------------------------------------------------------------
 
 import numpy
-from random import randrange
+from random import random
 
 from cerebro2.patcher import Patcher
 # This is the class corresponding to the C++ optimized Temporal Pooler
@@ -49,9 +49,10 @@ def run():
 
 
 def generateInput(inputArray):
+  sparsity = 0.1
   inputArray[0:] = 0
   for i in range(inputArray.size):
-    inputArray[i] = randrange(2)
+    inputArray[i] = random() < sparsity
 
 
 
