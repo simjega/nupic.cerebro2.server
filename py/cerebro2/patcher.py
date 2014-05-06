@@ -36,7 +36,7 @@ class Patcher:
 
 
   def __init__(self, dataDir="/tmp/cerebro2/model"):
-    self.paths = Paths(dataDir)
+    self.paths = Paths(dataDir, deleteExisting=True)
 
 
   def patchCLAModel(self, model):

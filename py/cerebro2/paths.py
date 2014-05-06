@@ -19,6 +19,7 @@
 # http://numenta.org/licenses/
 # ----------------------------------------------------------------------
 import os
+import shutil
 
 
 
@@ -34,8 +35,11 @@ FILENAME_PROXIMAL_SYNAPSES = "proximal_synapses.json"
 class Paths:
 
 
-  def __init__(self, dataDir):
+  def __init__(self, dataDir, deleteExisting=False):
     self.dataDir = dataDir
+
+    if deleteExisting and os.path.exists(dataDir):
+      shutil.rmtree(dataDir)
 
     if not os.path.exists(dataDir):
       os.makedirs(dataDir)
