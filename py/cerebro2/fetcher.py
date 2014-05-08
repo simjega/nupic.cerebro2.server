@@ -34,7 +34,10 @@ class Fetcher:
 
   def getNumIterations(self):
     statesDir = self.paths.states()
-    return len(os.listdir(statesDir))
+    states = os.listdir(statesDir)
+    states = [state for state in states if not state.startswith(".")]
+    print states
+    return len(states)
 
 
   def getDimensions(self, layer):

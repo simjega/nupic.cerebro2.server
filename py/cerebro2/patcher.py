@@ -81,7 +81,7 @@ class Patch:
 
   def __init__(self, patcher):
     self.patcher = patcher
-    self.iteration = 0
+    self.iteration = 1
 
 
 
