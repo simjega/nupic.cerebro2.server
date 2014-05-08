@@ -36,7 +36,6 @@ class Fetcher:
     statesDir = self.paths.states()
     states = os.listdir(statesDir)
     states = [state for state in states if not state.startswith(".")]
-    print states
     return len(states)
 
 
