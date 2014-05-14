@@ -62,6 +62,10 @@ class Fetcher:
     return readJSON(self.paths.proximalSynapses(layer, iteration),
                     notFoundValue=[])
 
+  def getDistalSynapses(self, layer, iterations):
+    return readJSON(self.paths.DistalSynapses(layers, iteration), 
+                    notFoundValue=[])
+
 
 
 def readJSON(filepath, notFoundValue=None):

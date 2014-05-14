@@ -21,15 +21,13 @@
 import os
 import shutil
 
-
-
 DIRNAME_DIMENSIONS         = "dimensions"
 DIRNAME_MODEL_STATES       = "states"
 FILENAME_ACTIVE_COLUMNS    = "active_columns.json"
 FILENAME_ACTIVE_CELLS      = "active_cells.json"
 FILENAME_PREDICTED_CELLS   = "predicted_cells.json"
 FILENAME_PROXIMAL_SYNAPSES = "proximal_synapses.json"
-
+FILENAME_DISTAL_SYNAPSES   = "distal_synapses.json"
 
 
 class Paths:
@@ -91,6 +89,13 @@ class Paths:
 
     return getPath(directory, FILENAME_PROXIMAL_SYNAPSES)
 
+  def distalSynapses(self, layer, iteration):
+    directory = os.path.join(self.dataDir, 
+                              DIRNAME_MODEL_STATES,
+                              str(iteration),
+                              layer)
+
+    return getPath(directory, FILENAME_DISTAL_SYNAPSES)
 
 
 def getDirectory(directory):

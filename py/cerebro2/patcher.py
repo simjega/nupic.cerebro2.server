@@ -74,6 +74,9 @@ class Patcher:
   def saveProximalSynapses(self, proximalSynapses, layer, iteration):
     writeJSON(proximalSynapses, self.paths.proximalSynapses(layer, iteration))
 
+  def saveDistalSynapses(self, distalSynapses, layer, iteration):
+        writeJSON(distalSynapses, self.paths.distalSynapses(layer, iteration))
+
 
 
 class Patch:
@@ -178,7 +181,32 @@ class TPPatch(Patch):
 
     predictedCells = self.tp.getPredictedState().reshape(-1).nonzero()[0].tolist()
     self.patcher.savePredictedCells(predictedCells, "output", self.iteration)
+    allCells = self.tp.cells
+    distalSynapses = []
 
+    """ Distal synapses storage format:
+        A list of distal connections, each represented by a list: 
+        [srcCol, srcCellIdx, destCol, destCellIdx, permanence]
+            ...where  srcColis the id of the source column,
+                      srcCellIdx is the id of the source cell in the column,
+                      destCol is the id of the destination column,
+                      destCellIdx is the id of the destination cell in the column,
+                      permanence is permancence value of the distal connection
+    """
+
+    allCells = self.tp.cells
+    for destCol in xrange(len(allCells)):
+        for destCellIdx in xrange(len(allCells[destCol])):
+            connections = []
+            for segi in xrange(self.tp.getNumSegmentsInCell(destCol, destCellIdx)):
+                syns = self.tp.getSegmentOnCell(destCol, destCellIdx, segi)[1:]
+                for syn in syns:
+                  [srcCol, srcCellIdx, permanence] = syn
+                  connections.append([srcCol, srcCellIdx, destCol, destCellIdx, permanence])
+
+            distalSynapses += connections
+
+    self.patcher.saveDistalSynapses(distalSynapses, "output", self.iteration)
 
 
 def writeJSON(obj, filepath):
