@@ -91,6 +91,14 @@ class ProximalSynapses:
 
 
 
+class DistalSynapses:
+
+
+  def GET(self, layer, iteration):
+    return jsonResponse(fetcher.getDistalSynapses(layer, iteration))
+
+
+
 def jsonResponse(obj):
   callbackFn = web.input(callback=None).callback
   jsonStr = json.dumps(obj)
