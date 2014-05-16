@@ -25,14 +25,16 @@ import shutil
 
 DIRNAME_DIMENSIONS         = "dimensions"
 DIRNAME_MODEL_STATES       = "states"
+DIRNAME_ENCODERS           = "encoders"
 
 FILENAME_ACTIVE_COLUMNS    = "active_columns.json"
 FILENAME_ACTIVE_CELLS      = "active_cells.json"
 FILENAME_PREDICTED_CELLS   = "predicted_cells.json"
 FILENAME_PROXIMAL_SYNAPSES = "proximal_synapses.json"
 
-FILENAME_ENCODER_INPUT     = "encoder_input.json"
-FILENAME_ENCODER_OUTPUT    = "encoder_output.json"
+# Encoders
+FILENAME_INPUT   = "input.json"
+FILENAME_OUTPUT  = "output.json"
 
 
 
@@ -96,20 +98,24 @@ class Paths:
     return getPath(directory, FILENAME_PROXIMAL_SYNAPSES)
 
 
-  def encoderInput(self, iteration):
+  def encoderInput(self, name, iteration):
     directory = os.path.join(self.dataDir,
                               DIRNAME_MODEL_STATES,
+                              DIRNAME_ENCODERS,
+                              name,
                               str(iteration))
 
-    return getPath(directory, FILENAME_ENCODER_INPUT)
+    return getPath(directory, FILENAME_INPUT)
 
 
-  def encoderOutput(self, iteration):
+  def encoderOutput(self, name, iteration):
     directory = os.path.join(self.dataDir,
                               DIRNAME_MODEL_STATES,
-                              str(iteration))
+                              str(iteration),
+                              DIRNAME_ENCODERS,
+                              name)
 
-    return getPath(directory, FILENAME_ENCODER_OUTPUT)
+    return getPath(directory, FILENAME_OUTPUT)
 
 
 

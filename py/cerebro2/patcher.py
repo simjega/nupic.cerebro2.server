@@ -57,8 +57,8 @@ class Patcher:
     TPPatch(self).patch(tp, sp=sp)
 
 
-  def patchEncoder(self, encoder):
-    EncoderPatch(self).patch(encoder)
+  def patchEncoder(self, encoder, name):
+    EncoderPatch(self).patch(encoder, name)
 
 
   def saveDimensions(self, dimensions, layer):
@@ -190,8 +190,9 @@ class TPPatch(Patch):
 class EncoderPatch(Patch):
 
 
-  def patch(self, encoder):
+  def patch(self, encoder, name):
     self.encoder = encoder
+    self.name = name
 
     encodeIntoArray = encoder.encodeIntoArray
 
@@ -204,8 +205,10 @@ class EncoderPatch(Patch):
 
 
   def saveState(self, inputData, output):
-    writeJSON(inputData, self.patcher.paths.encoderInput(self.iteration))
-    writeJSON(output.nonzero()[0], self.patcher.paths.encoderOutput(self.iteration))
+    writeJSON(inputData,
+              self.patcher.paths.encoderInput(self.name, self.iteration))
+    writeJSON(output.nonzero()[0],
+              self.patcher.paths.encoderOutput(self.name, self.iteration))
 
 
 
