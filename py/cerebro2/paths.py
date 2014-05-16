@@ -101,9 +101,9 @@ class Paths:
   def encoderInput(self, name, iteration):
     directory = os.path.join(self.dataDir,
                               DIRNAME_MODEL_STATES,
+                              str(iteration),
                               DIRNAME_ENCODERS,
-                              name,
-                              str(iteration))
+                              name)
 
     return getPath(directory, FILENAME_INPUT)
 

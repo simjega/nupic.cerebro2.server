@@ -20,7 +20,6 @@
 # ----------------------------------------------------------------------
 import json
 import numpy
-import os
 
 from nupic.bindings.math import GetNTAReal
 
@@ -32,7 +31,7 @@ realType = GetNTAReal()
 
 
 
-class Patcher:
+class Patcher(object):
 
 
   def __init__(self, dataDir="/tmp/cerebro2/model"):
@@ -82,7 +81,7 @@ class Patcher:
 
 
 
-class Patch:
+class Patch(object):
 
 
   def __init__(self, patcher):
@@ -220,6 +219,6 @@ def writeJSON(obj, filepath):
 
 class NumpyAwareJSONEncoder(json.JSONEncoder):
   def default(self, obj):
-    if isinstance(obj, numpy.ndarray) and obj.ndim == 1:
-      return [x for x in obj]
+    if isinstance(obj, numpy.ndarray):
+      return obj.tolist()
     return json.JSONEncoder.default(self, obj)
