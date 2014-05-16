@@ -95,9 +95,9 @@ class SPPatch(Patch):
 
     compute = sp.compute
 
-    def patchedCompute(inputVector, learn, activeArray):
-      results = compute(inputVector, learn, activeArray)
-      self.saveState(inputVector, activeArray)
+    def patchedCompute(*args, **kwargs):
+      results = compute(*args, **kwargs)
+      self.saveState(args[0], args[2])
       self.iteration += 1
       return results
 
@@ -151,8 +151,8 @@ class TPPatch(Patch):
 
     compute = tp.compute
 
-    def patchedCompute(bottomUpInput, enableLearn, computeInfOutput=None):
-      results = compute(bottomUpInput, enableLearn, computeInfOutput=computeInfOutput)
+    def patchedCompute(*args, **kwargs):
+      results = compute(*args, **kwargs)
       self.saveState()
       self.iteration += 1
       return results
