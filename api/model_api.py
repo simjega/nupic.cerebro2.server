@@ -23,23 +23,27 @@ import json
 import os
 import web
 
-from cerebro2.fetcher import Fetcher
+from cerebro2.paths import Paths
 
 
 
 # TODO: make this a parameter
 DATA_DIR = "/tmp/cerebro2/model"
 
-fetcher = Fetcher(DATA_DIR)
-
 urls = (
   r"/num_iterations", "NumIterations",
-  r"/([-\w]*)/dimensions", "Dimensions",
-  r"/([-\w]*)/(\d+)/active_columns", "ActiveColumns",
-  r"/([-\w]*)/(\d+)/active_cells", "ActiveCells",
-  r"/([-\w]*)/(\d+)/predicted_cells", "PredictedCells",
-  r"/([-\w]*)/(\d+)/proximal_synapses", "ProximalSynapses",
+  r"/([-\w\/]*)", "Fetch",
 )
+
+
+
+class Fetch:
+
+
+  def GET(self, path):
+    components = (path + ".json").split("/")
+    filepath = os.path.join(DATA_DIR, *components)
+    return jsonResponse(readJSON(filepath))
 
 
 
@@ -47,48 +51,22 @@ class NumIterations:
 
 
   def GET(self):
-    return jsonResponse(fetcher.getNumIterations())
+    paths = Paths(DATA_DIR)
+    statesDir = paths.states()
+    states = os.listdir(statesDir)
+    states = [state for state in states if not state.startswith(".")]
+    return jsonResponse(len(states))
 
 
 
-class Dimensions:
-
-
-  def GET(self, layer):
-    return jsonResponse(fetcher.getDimensions(layer))
-
-
-
-class ActiveColumns:
-
-
-  def GET(self, layer, iteration):
-    return jsonResponse(fetcher.getActiveColumns(layer, iteration))
-
-
-
-class ActiveCells:
-
-
-  def GET(self, layer, iteration):
-    return jsonResponse(fetcher.getActiveCells(layer, iteration))
-
-
-
-class PredictedCells:
-
-
-  def GET(self, layer, iteration):
-    return jsonResponse(fetcher.getPredictedCells(layer, iteration))
-
-
-
-class ProximalSynapses:
-
-
-  def GET(self, layer, iteration):
-    return jsonResponse(fetcher.getProximalSynapses(layer, iteration))
-
+def readJSON(filepath, notFoundValue=None):
+  try:
+    with open(filepath, 'r') as infile:
+      return json.load(infile)
+  except IOError as error:
+    if notFoundValue == None:
+      raise error
+    return notFoundValue
 
 
 class DistalSynapses:
