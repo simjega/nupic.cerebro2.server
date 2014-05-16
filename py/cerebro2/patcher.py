@@ -75,8 +75,7 @@ class Patcher:
     writeJSON(proximalSynapses, self.paths.proximalSynapses(layer, iteration))
 
   def saveDistalSynapses(self, distalSynapses, layer, iteration):
-        writeJSON(distalSynapses, self.paths.distalSynapses(layer, iteration))
-
+    writeJSON(distalSynapses, self.paths.distalSynapses(layer, iteration))
 
 
 class Patch:
