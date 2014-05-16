@@ -32,9 +32,10 @@ FILENAME_ACTIVE_CELLS      = "active_cells.json"
 FILENAME_PREDICTED_CELLS   = "predicted_cells.json"
 FILENAME_PROXIMAL_SYNAPSES = "proximal_synapses.json"
 
-# Encoder
-FILENAME_INPUT   = "input.json"
-FILENAME_OUTPUT  = "output.json"
+# Encoders
+FILENAME_ENCODERS = "encoders.json"
+FILENAME_INPUT    = "input.json"
+FILENAME_OUTPUT   = "output.json"
 
 # Coordinate Encoder
 FILENAME_NEIGHBORS          = "neighbors.json"
@@ -100,6 +101,11 @@ class Paths:
                               layer)
 
     return getPath(directory, FILENAME_PROXIMAL_SYNAPSES)
+
+
+  def encoders(self):
+    directory = os.path.join(self.dataDir)
+    return getPath(directory, FILENAME_ENCODERS)
 
 
   def encoderInput(self, name, iteration):

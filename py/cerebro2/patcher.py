@@ -20,6 +20,7 @@
 # ----------------------------------------------------------------------
 import json
 import numpy
+import os
 
 from nupic.bindings.math import GetNTAReal
 
@@ -197,6 +198,8 @@ class EncoderPatch(Patch):
     self.encoder = encoder
     self.name = name
 
+    self.updateManifest()
+
     encodeIntoArray = encoder.encodeIntoArray
 
     def patchedEncodeIntoArray(*args, **kwargs):
@@ -205,6 +208,13 @@ class EncoderPatch(Patch):
       self.iteration += 1
 
     encoder.encodeIntoArray = patchedEncodeIntoArray
+
+
+  def updateManifest(self):
+    path = self.patcher.paths.encoders()
+    manifest = readJSON(path)
+    manifest.append({self.name: self.encoder.__class__.__name__})
+    writeJSON(manifest, path)
 
 
   def saveState(self, inputData, output):
@@ -254,6 +264,14 @@ class CoordinateEncoderPatch(EncoderPatch):
 def writeJSON(obj, filepath):
   with open(filepath, 'w') as outfile:
     json.dump(obj, outfile, cls=NumpyAwareJSONEncoder)
+
+
+def readJSON(filepath, create=True, initialObject=[]):
+  if create and not os.path.exists(filepath):
+    writeJSON(initialObject, filepath)
+
+  with open(filepath, 'r') as infile:
+    return json.load(infile)
 
 
 
