@@ -32,9 +32,13 @@ FILENAME_ACTIVE_CELLS      = "active_cells.json"
 FILENAME_PREDICTED_CELLS   = "predicted_cells.json"
 FILENAME_PROXIMAL_SYNAPSES = "proximal_synapses.json"
 
-# Encoders
+# Encoder
 FILENAME_INPUT   = "input.json"
 FILENAME_OUTPUT  = "output.json"
+
+# Coordinate Encoder
+FILENAME_NEIGHBORS          = "neighbors.json"
+FILENAME_TOP_W_COORDINATES  = "top_w_coordinates.json"
 
 
 
@@ -116,6 +120,26 @@ class Paths:
                               name)
 
     return getPath(directory, FILENAME_OUTPUT)
+
+
+  def coordinateEncoderNeighbors(self, name, iteration):
+    directory = os.path.join(self.dataDir,
+                              DIRNAME_MODEL_STATES,
+                              str(iteration),
+                              DIRNAME_ENCODERS,
+                              name)
+
+    return getPath(directory, FILENAME_NEIGHBORS)
+
+
+  def coordinateEncoderTopWCoordinates(self, name, iteration):
+    directory = os.path.join(self.dataDir,
+                              DIRNAME_MODEL_STATES,
+                              str(iteration),
+                              DIRNAME_ENCODERS,
+                              name)
+
+    return getPath(directory, FILENAME_TOP_W_COORDINATES)
 
 
 

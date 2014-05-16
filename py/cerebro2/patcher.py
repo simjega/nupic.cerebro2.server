@@ -60,6 +60,10 @@ class Patcher(object):
     EncoderPatch(self).patch(encoder, name)
 
 
+  def patchCoordinateEncoder(self, encoder, name):
+    CoordinateEncoderPatch(self).patch(encoder, name)
+
+
   def saveDimensions(self, dimensions, layer):
     writeJSON(dimensions, self.paths.dimensions(layer))
 
@@ -208,6 +212,42 @@ class EncoderPatch(Patch):
               self.patcher.paths.encoderInput(self.name, self.iteration))
     writeJSON(output.nonzero()[0],
               self.patcher.paths.encoderOutput(self.name, self.iteration))
+
+
+
+class CoordinateEncoderPatch(EncoderPatch):
+
+
+  def patch(self, encoder, name):
+    super(CoordinateEncoderPatch, self).patch(encoder, name)
+
+    neighbors = encoder.neighbors
+
+    def patchedNeighbors(*args, **kwargs):
+      coordinates = neighbors(*args, **kwargs)
+      self.saveNeighbors(coordinates)
+      return coordinates
+
+    encoder.neighbors = patchedNeighbors
+
+    topWCoordinates = encoder.topWCoordinates
+
+    def patchedTopWCoordinates(*args, **kwargs):
+      coordinates = topWCoordinates(*args, **kwargs)
+      self.saveTopWCoordinates(coordinates)
+      return coordinates
+
+    encoder.topWCoordinates = patchedTopWCoordinates 
+
+
+  def saveNeighbors(self, neighbors):
+    writeJSON(neighbors,
+              self.patcher.paths.coordinateEncoderNeighbors(self.name, self.iteration))
+
+
+  def saveTopWCoordinates(self, coordinates):
+    writeJSON(coordinates,
+              self.patcher.paths.coordinateEncoderTopWCoordinates(self.name, self.iteration))
 
 
 
