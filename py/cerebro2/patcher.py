@@ -40,9 +40,11 @@ class Patcher:
 
 
   def patchCLAModel(self, model):
+    # Get internal Spatial Pooler Python object
     sp = model._getSPRegion().getSelf()._sfdr
     self.patchSP(sp)
 
+    # Get internal Temporal Pooler Python object
     tp = model._getTPRegion().getSelf()._tfdr
     self.patchTP(tp, sp=sp)
 
@@ -53,6 +55,10 @@ class Patcher:
 
   def patchTP(self, tp, sp=None):
     TPPatch(self).patch(tp, sp=sp)
+
+
+  def patchEncoder(self, encoder):
+    EncoderPatch(self).patch(encoder)
 
 
   def saveDimensions(self, dimensions, layer):
@@ -181,6 +187,36 @@ class TPPatch(Patch):
 
 
 
+class EncoderPatch(Patch):
+
+
+  def patch(self, encoder):
+    self.encoder = encoder
+
+    encodeIntoArray = encoder.encodeIntoArray
+
+    def patchedEncodeIntoArray(*args, **kwargs):
+      encodeIntoArray(*args, **kwargs)
+      self.saveState(args[0], args[1])
+      self.iteration += 1
+
+    encoder.encodeIntoArray = patchedEncodeIntoArray
+
+
+  def saveState(self, inputData, output):
+    writeJSON(inputData, self.patcher.paths.encoderInput(self.iteration))
+    writeJSON(output.nonzero()[0], self.patcher.paths.encoderOutput(self.iteration))
+
+
+
 def writeJSON(obj, filepath):
   with open(filepath, 'w') as outfile:
-    json.dump(obj, outfile)
+    json.dump(obj, outfile, cls=NumpyAwareJSONEncoder)
+
+
+
+class NumpyAwareJSONEncoder(json.JSONEncoder):
+  def default(self, obj):
+    if isinstance(obj, numpy.ndarray) and obj.ndim == 1:
+      return [x for x in obj]
+    return json.JSONEncoder.default(self, obj)
