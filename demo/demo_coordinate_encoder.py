@@ -35,14 +35,22 @@ def run():
                               n=n,
                               w=w)
   Patcher().patchCoordinateEncoder(encoder, encoder.name)
-  radius = 5
 
-  encode(encoder, numpy.array([100, 200]), radius)
-  encode(encoder, numpy.array([100, 200]), radius)
-  encode(encoder, numpy.array([100, 201]), radius)
-  encode(encoder, numpy.array([101, 201]), radius)
-  encode(encoder, numpy.array([101, 202]), radius)
-  encode(encoder, numpy.array([801, 501]), radius)
+  encode(encoder, numpy.array([10, 20]), 5)
+  encode(encoder, numpy.array([10, 21]), 5)
+  encode(encoder, numpy.array([10, 22]), 5)
+  encode(encoder, numpy.array([10, 23]), 5)
+  encode(encoder, numpy.array([10, 23]), 7)
+  encode(encoder, numpy.array([10, 23]), 9)
+  encode(encoder, numpy.array([10, 26]), 9)
+  encode(encoder, numpy.array([10, 35]), 10)
+  encode(encoder, numpy.array([10, 40]), 15)
+  encode(encoder, numpy.array([10, 50]), 30)
+  encode(encoder, numpy.array([10, 70]), 30)
+  encode(encoder, numpy.array([30, 70]), 30)
+  encode(encoder, numpy.array([50, 70]), 30)
+  encode(encoder, numpy.array([70, 70]), 30)
+  encode(encoder, numpy.array([90, 70]), 30)
 
 
 
