@@ -26,6 +26,9 @@ from nupic.bindings.math import GetNTAReal
 
 from cerebro2.paths import Paths
 
+# Disable warnings about accessing protected members
+# pylint: disable=W0212
+
 
 
 realType = GetNTAReal()
@@ -234,23 +237,23 @@ class CoordinateEncoderPatch(EncoderPatch):
   def patch(self, encoder, name):
     super(CoordinateEncoderPatch, self).patch(encoder, name)
 
-    neighbors = encoder.neighbors
+    neighbors = encoder._neighbors
 
     def patchedNeighbors(*args, **kwargs):
       coordinates = neighbors(*args, **kwargs)
       self.saveNeighbors(coordinates)
       return coordinates
 
-    encoder.neighbors = patchedNeighbors
+    encoder._neighbors = patchedNeighbors
 
-    topWCoordinates = encoder.topWCoordinates
+    topWCoordinates = encoder._topWCoordinates
 
     def patchedTopWCoordinates(*args, **kwargs):
       coordinates = topWCoordinates(*args, **kwargs)
       self.saveTopWCoordinates(coordinates)
       return coordinates
 
-    encoder.topWCoordinates = patchedTopWCoordinates 
+    encoder._topWCoordinates = patchedTopWCoordinates 
 
 
   def saveNeighbors(self, neighbors):
