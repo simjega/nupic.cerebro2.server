@@ -218,7 +218,8 @@ class EncoderPatch(Patch):
     manifest = readJSON(path)
     manifest.append({
       "name": self.name,
-      "cls": self.encoder.__class__.__name__
+      "cls": self.encoder.__class__.__name__,
+      "parameters": self.encoder.__dict__
     })
     writeJSON(manifest, path)
 
