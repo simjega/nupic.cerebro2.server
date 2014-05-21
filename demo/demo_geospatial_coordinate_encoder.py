@@ -36,7 +36,7 @@ def run(dataPath):
                                         60,
                                         n=999,
                                         w=25,
-                                        name='coordinate')
+                                        name='geospatial_coordinate')
   Patcher().patchCoordinateEncoder(encoder, encoder.name)
 
   with open(dataPath) as csvfile:
