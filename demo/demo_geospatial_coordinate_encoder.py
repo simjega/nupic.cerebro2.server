@@ -32,8 +32,8 @@ from nupic.encoders.geospatial_coordinate import GeospatialCoordinateEncoder
 
 
 def run(dataPath):
-  encoder = GeospatialCoordinateEncoder(30,
-                                        60,
+  encoder = GeospatialCoordinateEncoder(100,
+                                        30,
                                         n=999,
                                         w=25,
                                         name='geospatial_coordinate')
