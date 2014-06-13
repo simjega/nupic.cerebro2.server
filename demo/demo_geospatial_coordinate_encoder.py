@@ -32,10 +32,10 @@ from nupic.encoders.geospatial_coordinate import GeospatialCoordinateEncoder
 
 
 def run(dataPath):
-  encoder = GeospatialCoordinateEncoder(100,
-                                        30,
-                                        n=999,
-                                        w=25,
+  encoder = GeospatialCoordinateEncoder(10,
+                                        10,
+                                        n=2048,
+                                        w=51,
                                         name='geospatial_coordinate')
   Patcher().patchCoordinateEncoder(encoder, encoder.name)
 
