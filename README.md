@@ -1,6 +1,6 @@
 # Cerebro 2 Server
 
-Makes a CLA model's state history available to the [Cerebro 2 client](https://github.com/chetan51/nupic.cerebro2).
+Makes a CLA model's state history available to the [Cerebro 2 client](https://github.com/numenta/nupic.cerebro2).
 
 ## Installation
 
@@ -36,7 +36,7 @@ Then, after the model / SP / TP has through a number of iterations:
 
     python server.py 9090
 
-Finally, switch to [nupic.cerebro2](https://github.com/chetan51/nupic.cerebro2) to visualize your model / SP / TP.
+Finally, switch to [nupic.cerebro2](https://github.com/numenta/nupic.cerebro2) to visualize your model / SP / TP.
 
 ## Demos
 
