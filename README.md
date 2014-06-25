@@ -1,6 +1,6 @@
 # Cerebro 2 Server
 
-Makes a CLA model's state history available to the Cerebro 2 client.
+Makes a CLA model's state history available to the [Cerebro 2 client](https://github.com/chetan51/nupic.cerebro2).
 
 ## Installation
 
